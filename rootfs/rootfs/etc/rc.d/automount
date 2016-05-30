@@ -2,6 +2,7 @@
 echo "automount ...";
 
 rm -rf /var/lib/docker
-mount -t 9p -o version=9p2000.u -o trans=virtio -o cache=mmap docker /var/lib/docker
+mkdir /var/lib/docker
+mount -t 9p -o version=9p2000.L -o trans=virtio -o cache=mmap docker /var/lib/docker
 
 echo "automount over."
