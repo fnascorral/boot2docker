@@ -277,6 +277,7 @@ RUN curl -fSL -o /tmp/dockerbin.tgz https://get.docker.com/builds/Linux/x86_64/d
 
 # Copy our custom rootfs
 COPY rootfs/rootfs $ROOTFS
+RUN chmod +x $ROOTFS/usr/local/bin/truncate
 
 # setup acpi config dir &
 # tcl6's sshd is compiled without `/usr/local/sbin` in the path
