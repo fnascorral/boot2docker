@@ -99,6 +99,10 @@ start() {
         EXTRA_ARGS="$EXTRA_ARGS -s $DOCKER_STORAGE"
     fi
 
+    if [ "$DOCKER_STORAGE" = 'devicemapper' ]; then
+        EXTRA_ARGS="$EXTRA_ARGS --storage-opt dm.override_udev_sync_check=true"
+    fi
+
     # Increasing the number of open files and processes by docker
     ulimit -n $DOCKER_ULIMITS
     ulimit -p $DOCKER_ULIMITS
