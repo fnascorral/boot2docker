@@ -8,7 +8,7 @@ mount -t 9p -o version=9p2000.L -o trans=virtio -o cache=mmap docker /var/lib/do
 mount -t 9p -o version=9p2000.L -o trans=virtio -o cache=mmap mnt /host
 
 if [ ! -f /var/lib/docker/storage.img ]; then
-  truncate -s 1T /var/lib/docker/storage.img
+  /usr/local/bin/truncate -s 1T /var/lib/docker/storage.img
   mkfs.ext4 /var/lib/docker/storage.img
 fi
 
