@@ -17,8 +17,7 @@ RUN apt-get update && apt-get -y install  unzip \
                         isolinux \
                         automake \
                         pkg-config \
-                        p7zip-full \
-                        coreutils
+                        p7zip-full
 
 # https://www.kernel.org/
 ENV KERNEL_VERSION  4.4.18
