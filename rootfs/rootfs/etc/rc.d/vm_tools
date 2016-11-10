@@ -1,0 +1,4 @@
+#!/bin/sh
+
+/usr/local/sbin/freenas-vm-tools --pid /var/run/freenas-vm-tools.pid --daemon
+

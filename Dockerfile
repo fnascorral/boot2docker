@@ -17,7 +17,8 @@ RUN apt-get update && apt-get -y install  unzip \
                         isolinux \
                         automake \
                         pkg-config \
-                        p7zip-full
+                        p7zip-full \
+                        cmake
 
 # https://www.kernel.org/
 ENV KERNEL_VERSION  4.4.27
@@ -272,6 +273,39 @@ RUN git clone -b "$XEN_VERSION" "$XEN_REPO" /xentools \
     && cd /xentools \
     && make \
     && tar xvf build/dist/*.tgz -C $ROOTFS/
+
+#Add FreeNAS VM tools
+#Install POCO library to both container and rootfs
+
+ENV POCO_PATH /tmp/poco
+
+RUN mkdir -p $POCO_PATH
+RUN cd $POCO_PATH \
+    && wget https://pocoproject.org/releases/poco-1.7.6/poco-1.7.6.tar.gz \
+    && tar xvf poco* \
+    && cd poco-1.7.6 \
+    && ./configure \
+    && make -s \
+    && make -s install \
+    && ./configure --prefix=$ROOTFS/usr/local \
+    && make -s \
+    && make -s install
+
+#Install VM tools themselves
+
+ENV VM_TOOLS_PATH /tmp/vm_tools
+
+RUN mkdir -p $VM_TOOLS_PATH
+RUN cd $VM_TOOLS_PATH \
+    && git clone https://github.com/freenas/freenas-vm-tools/ \
+    && cd freenas-vm-tools \
+    && mkdir -p build \
+    && cd build \
+    && cmake ../ \
+    && mkdir -p $ROOTFS/usr/local/sbin/ \
+    && mkdir -p $ROOTFS/usr/local/lib/freenas-vm-tools/ \
+    && cp freenas-vm-tools $ROOTFS/usr/local/sbin/ \
+    && cp -r lib*.so $ROOTFS/usr/local/lib/freenas-vm-tools/
 
 # TODO find a binary we can attempt running that will verify at least on the surface level that the xentools are working
 
