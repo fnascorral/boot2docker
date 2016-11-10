@@ -20,7 +20,7 @@ RUN apt-get update && apt-get -y install  unzip \
                         p7zip-full
 
 # https://www.kernel.org/
-ENV KERNEL_VERSION  4.4.18
+ENV KERNEL_VERSION  4.4.27
 
 # Fetch the kernel sources
 RUN curl --retry 10 https://www.kernel.org/pub/linux/kernel/v${KERNEL_VERSION%%.*}.x/linux-$KERNEL_VERSION.tar.xz | tar -C / -xJ && \
@@ -29,7 +29,7 @@ RUN curl --retry 10 https://www.kernel.org/pub/linux/kernel/v${KERNEL_VERSION%%.
 # http://aufs.sourceforge.net/
 ENV AUFS_REPO       https://github.com/sfjro/aufs4-standalone
 ENV AUFS_BRANCH     aufs4.4
-ENV AUFS_COMMIT     9079f3e3c6d910b939c31292eb2bfc85c0bb6a91
+ENV AUFS_COMMIT     7d174ae40b4c9c876ee51aa50fa4ee1f3747de23
 # we use AUFS_COMMIT to get stronger repeatability guarantees
 
 # Download AUFS and apply patches and files, then remove it
@@ -144,6 +144,18 @@ RUN set -ex && \
 # Install Tiny Core Linux rootfs
 RUN cd $ROOTFS && zcat /tcl_rootfs.gz | cpio -f -i -H newc -d --no-absolute-filenames
 
+# Extract ca-certificates
+RUN set -x \
+#  TCL changed something such that these need to be extracted post-install
+	&& chroot "$ROOTFS" sh -xc 'ldconfig && /usr/local/tce.installed/openssl' \
+#  Docker looks for them in /etc/ssl
+	&& ln -sT ../usr/local/etc/ssl "$ROOTFS/etc/ssl" \
+#  a little testing is always prudent
+	&& cp "$ROOTFS/etc/resolv.conf" resolv.conf.bak \
+	&& cp /etc/resolv.conf "$ROOTFS/etc/resolv.conf" \
+	&& chroot "$ROOTFS" curl -fsSL 'https://www.google.com' -o /dev/null \
+	&& mv resolv.conf.bak "$ROOTFS/etc/resolv.conf"
+
 # Apply horrible hacks
 RUN cd $ROOTFS && ln -s lib lib64
 
@@ -152,7 +164,7 @@ RUN curl -fL -o $ROOTFS/usr/local/bin/generate_cert https://github.com/SvenDowid
     chmod +x $ROOTFS/usr/local/bin/generate_cert
 
 # Build VBox guest additions
-ENV VBOX_VERSION 5.1.4
+ENV VBOX_VERSION 5.1.8
 RUN set -x && \
     \
     mkdir -p /vboxguest && \
