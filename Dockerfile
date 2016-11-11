@@ -286,10 +286,10 @@ RUN cd $POCO_PATH \
     && wget https://pocoproject.org/releases/poco-1.7.6/poco-1.7.6.tar.gz \
     && tar xvf poco* \
     && cd poco-1.7.6 \
-    && ./configure \
+    && ./configure --minimal \
     && make -s \
     && make -s install \
-    && ./configure --prefix=$ROOTFS/usr/local \
+    && ./configure --prefix=$ROOTFS/usr/local --minimal \
     && make -s \
     && make -s install
 
