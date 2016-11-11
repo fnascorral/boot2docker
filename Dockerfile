@@ -19,6 +19,7 @@ RUN apt-get update && apt-get -y install  unzip \
                         pkg-config \
                         p7zip-full \
                         cmake \
+                        clang \
                         wget
 
 # https://www.kernel.org/
@@ -302,7 +303,8 @@ RUN cd $VM_TOOLS_PATH \
     && cd freenas-vm-tools \
     && mkdir -p build \
     && cd build \
-    && cmake ../ \
+    && CC=clang CXX=clang cmake ../ \
+    && make \
     && mkdir -p $ROOTFS/usr/local/sbin/ \
     && mkdir -p $ROOTFS/usr/local/lib/freenas-vm-tools/ \
     && cp freenas-vm-tools $ROOTFS/usr/local/sbin/ \
