@@ -97,3 +97,10 @@ fi
 
 # Load Parallels Tools daemon
 /etc/rc.d/prltoolsd
+
+# Start syslog
+/etc/rc.d/syslog
+
+# Start FreeNAS VM tools
+/etc/rc.d/vm_tools
+
