@@ -310,10 +310,6 @@ RUN cd $VM_TOOLS_PATH \
     && cp freenas-vm-tools $ROOTFS/usr/local/sbin/ \
     && cp -r lib*.so $ROOTFS/usr/local/lib/freenas-vm-tools/
 
-#Install Pipework
-RUN curl https://raw.githubusercontent.com/jpetazzo/pipework/master/pipework > $ROOTFS/usr/local/bin/pipework \
-    && chmod +x $ROOTFS/usr/local/bin/pipework
-
 # TODO find a binary we can attempt running that will verify at least on the surface level that the xentools are working
 
 # Make sure that all the modules we might have added are recognized (especially VBox guest additions)
