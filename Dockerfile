@@ -20,7 +20,8 @@ RUN apt-get update && apt-get -y install  unzip \
                         p7zip-full \
                         cmake \
                         clang \
-                        wget
+                        wget \
+                        bridge-utils
 
 # https://www.kernel.org/
 ENV KERNEL_VERSION  4.4.27
@@ -309,6 +310,9 @@ RUN cd $VM_TOOLS_PATH \
     && mkdir -p $ROOTFS/usr/local/lib/freenas-vm-tools/ \
     && cp freenas-vm-tools $ROOTFS/usr/local/sbin/ \
     && cp -r lib*.so $ROOTFS/usr/local/lib/freenas-vm-tools/
+
+#Install bridge utils on rootfs
+RUN cp /sbin/brctl $ROOTFS/sbin/brctl
 
 # TODO find a binary we can attempt running that will verify at least on the surface level that the xentools are working
 
