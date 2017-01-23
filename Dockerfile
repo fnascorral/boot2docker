@@ -277,8 +277,8 @@ RUN git clone -b "$XEN_VERSION" "$XEN_REPO" /xentools \
     && make \
     && tar xvf build/dist/*.tgz -C $ROOTFS/
 
-#Add FreeNAS VM tools
-#Install POCO library to both container and rootfs
+# Add FreeNAS VM tools
+# Install POCO library to both container and rootfs
 
 ENV POCO_PATH /tmp/poco
 
@@ -310,6 +310,16 @@ RUN cd $VM_TOOLS_PATH \
     && mkdir -p $ROOTFS/usr/local/lib/freenas-vm-tools/ \
     && cp freenas-vm-tools $ROOTFS/usr/local/sbin/ \
     && cp -r lib*.so $ROOTFS/usr/local/lib/freenas-vm-tools/
+
+# Build strace
+RUN mkdir -p /tmp/strace
+RUN cd /tmp/strace \
+    && wget https://fossies.org/linux/misc/strace-4.15.tar.gz \
+    && tar xvzf strace-4.15.tar.gz \
+    && cd strace-4.15 \
+    && ./configure \
+    && make \
+    && cp strace $ROOTFS/usr/local/sbin/
 
 #Install bridge utils on rootfs
 RUN cp /sbin/brctl $ROOTFS/sbin/brctl
