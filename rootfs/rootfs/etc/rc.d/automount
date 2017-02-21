@@ -4,8 +4,8 @@ echo "automount ...";
 rm -rf /var/lib/docker
 mkdir /var/lib/docker
 mkdir /host
-mount -t 9p -o version=9p2000.L -o trans=virtio -o cache=mmap -o msize=524288 docker /var/lib/docker
-mount -t 9p -o version=9p2000.L -o trans=virtio -o cache=mmap -o msize=524288 mnt /host
+mount -t 9p -o version=9p2000.L -o trans=virtio -o cache=mmap -o msize=512000 docker /var/lib/docker
+mount -t 9p -o version=9p2000.L -o trans=virtio -o cache=mmap -o msize=512000 mnt /host
 
 if [ ! -f /var/lib/docker/storage.img ]; then
   /usr/local/bin/truncate -s 1T /var/lib/docker/storage.img
