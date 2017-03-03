@@ -1,0 +1,3 @@
+#!/bin/sh
+
+/usr/local/sbin/iptables -A INPUT  -i eth1 -p tcp --dport 2375 -j DROP
