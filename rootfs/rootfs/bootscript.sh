@@ -104,3 +104,5 @@ fi
 # Start FreeNAS VM tools
 /etc/rc.d/vm_tools
 
+# Apply additional iptables rules
+/etc/rc.d/iptables-rules
